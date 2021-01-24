@@ -6,9 +6,10 @@
 * `This is a beta release, it's up to you to make it evolve if you want to add your own code make merge request please`
 
 # 👋 Welcome to private provider registry action !
-Here you will find the github private provider registry , it's work only for terraform v13 and later.
-also you can post links or Bugs if you want that i help you .You can 
-
+Here you will a reimplementation of the Terraform Registry API, intended to be used when your modules can't, shouldn't or don't need to be public.  
+For all means and purposes it works in the same way as the public registry.
+it's work only for terraform v13 and later.
+also you can post links or Bugs 
 
 ## 📦 Packages/Libraries
 
