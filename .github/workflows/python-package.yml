@@ -1,0 +1,70 @@
+name: Python package
+
+on:
+  push:
+    branches: 
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7]
+
+    steps:
+    - name: Install Tree Package
+      run: sudo apt-get install tree
+      
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+      
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install flake8 pytest
+        if [ -f requierements.txt ]; then pip install -r requierements.txt; fi
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+    - name: Run main.py
+      env:
+        go_os: "linux,darwin"
+        go_arch: "amd64"
+        github_repo: "jbrunetext/terraform-provider-hashicup"
+        gpg_public_key: ${{ secrets.GPG_PUBLIC_KEY }}
+        github_token: ${{ secrets.SECRETGITHUBTOKEN }}
+        gpg_keyid: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        server_name: "ubuntu.localdomain"
+        #server_name: "private-registry.mycompany.org"
+        github_orga: "myorg"
+        github_max_release: "2"
+      run: |
+        python main.py
+
+    - name: Display Private Registry Tree
+      run: |
+        cd registry
+        tree
+
+    # - name: Push Registry to S3
+    #   uses: jakejarvis/s3-sync-action@v0.5.1
+    #   with:
+    #     args: --follow-symlinks
+    #   env:
+    #     AWS_S3_BUCKET: 'terraform-provider-registry'
+    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     AWS_REGION: 'eu-west-1'   # optional: defaults to us-east-1
+    #     SOURCE_DIR: 'registry'      # optional: defaults to entire repository
