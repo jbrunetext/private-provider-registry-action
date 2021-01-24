@@ -1,6 +1,5 @@
 .env*
-.env
-.env*
+.envs
 __pycache__*
 .vscode
 download

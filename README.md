@@ -46,7 +46,7 @@ If main.py succeed download release from the previous step GoRelease. You will s
 ![tree](img/treestructure.png)
 
 next you just need to copy paste the directory registry in /var/www/html dir.
-and finish wih terraform13 init.
+and finish with terraform13 init.
 
 
 if you want to host your private providers on S3 ou Google storage you just need to implement python-package.yml github action.
